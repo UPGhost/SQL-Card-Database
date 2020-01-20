@@ -37,7 +37,7 @@ namespace StarterApp
 
             if (NormalHours == true)
             {
-                Console.WriteLine("{0}{1}:{2}? Isn't it getting a bit late for you to be up?", SingleDigitHour, theDate.Hour.ToString(), theDate.Minute.ToString());
+                Console.WriteLine("Congratulations, you're up at a normal time of the day!", SingleDigitHour, theDate.Hour.ToString(), theDate.Minute.ToString());
             }
         }
     }
