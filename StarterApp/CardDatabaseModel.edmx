@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CardDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ChampionCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="LevelUpCardID" Type="int" Nullable="false" />
+          <Property Name="SpellCardID" Type="int" Nullable="false" />
+          <Property Name="LevelUpConditions" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FollowCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="AttackRating" Type="int" />
+          <Property Name="HealthRating" Type="int" />
+          <Property Name="Attribute1" Type="nchar" MaxLength="10" />
+          <Property Name="Attribute2" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="FullCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CardName" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Region" Type="nchar" MaxLength="15" Nullable="false" />
+          <Property Name="ManaCost" Type="int" />
+          <Property Name="CardType" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="CardRarity" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="CardDescription" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="SpellCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="SpellType" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LevelUpCardID">
+          <End Role="FullCard" Type="Self.FullCard" Multiplicity="1" />
+          <End Role="ChampionCard" Type="Self.ChampionCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FullCard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ChampionCard">
+              <PropertyRef Name="LevelUpCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpellCardID">
+          <End Role="FullCard" Type="Self.FullCard" Multiplicity="1" />
+          <End Role="ChampionCard" Type="Self.ChampionCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FullCard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ChampionCard">
+              <PropertyRef Name="SpellCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CardDatabaseModelStoreContainer">
+          <EntitySet Name="ChampionCard" EntityType="Self.ChampionCard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FollowCard" EntityType="Self.FollowCard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FullCard" EntityType="Self.FullCard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpellCard" EntityType="Self.SpellCard" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_LevelUpCardID" Association="Self.FK_LevelUpCardID">
+            <End Role="FullCard" EntitySet="FullCard" />
+            <End Role="ChampionCard" EntitySet="ChampionCard" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpellCardID" Association="Self.FK_SpellCardID">
+            <End Role="FullCard" EntitySet="FullCard" />
+            <End Role="ChampionCard" EntitySet="ChampionCard" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CardDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ChampionCard" BaseType="CardDatabaseModel.FollowerCard">
+          <Property Name="LevelUpCardID" Type="Int32" Nullable="false" />
+          <Property Name="SpellCardID" Type="Int32" Nullable="false" />
+          <Property Name="LevelUpConditions" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="FullCard" Relationship="Self.FK_LevelUpCardID" FromRole="ChampionCard" ToRole="FullCard" />
+          <NavigationProperty Name="FullCard1" Relationship="Self.FK_SpellCardID" FromRole="ChampionCard" ToRole="FullCard" />
+        </EntityType>
+        <EntityType Name="FollowerCard" BaseType="CardDatabaseModel.FullCard">
+          <Property Name="AttackRating" Type="Int32" />
+          <Property Name="HealthRating" Type="Int32" />
+          <Property Name="Attribute1" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Attribute2" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FullCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CardName" Type="String" MaxLength="30" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Region" Type="String" MaxLength="15" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="ManaCost" Type="Int32" />
+          <Property Name="CardType" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="CardRarity" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="CardDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ChampionCards" Relationship="Self.FK_LevelUpCardID" FromRole="FullCard" ToRole="ChampionCard" />
+          <NavigationProperty Name="ChampionCards1" Relationship="Self.FK_SpellCardID" FromRole="FullCard" ToRole="ChampionCard" />
+        </EntityType>
+        <EntityType Name="SpellCard" BaseType="CardDatabaseModel.FullCard">
+          <Property Name="SpellType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LevelUpCardID">
+          <End Role="FullCard" Type="Self.FullCard" Multiplicity="1" />
+          <End Role="ChampionCard" Type="Self.ChampionCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FullCard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ChampionCard">
+              <PropertyRef Name="LevelUpCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpellCardID">
+          <End Role="FullCard" Type="Self.FullCard" Multiplicity="1" />
+          <End Role="ChampionCard" Type="Self.ChampionCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FullCard">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ChampionCard">
+              <PropertyRef Name="SpellCardID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CardDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="FullCards" EntityType="Self.FullCard" />
+          <AssociationSet Name="FK_LevelUpCardID" Association="Self.FK_LevelUpCardID">
+            <End Role="FullCard" EntitySet="FullCards" />
+            <End Role="ChampionCard" EntitySet="FullCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpellCardID" Association="Self.FK_SpellCardID">
+            <End Role="FullCard" EntitySet="FullCards" />
+            <End Role="ChampionCard" EntitySet="FullCards" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CardDatabaseModelStoreContainer" CdmEntityContainer="CardDatabaseEntities">
+          <EntitySetMapping Name="FullCards">
+            <EntityTypeMapping TypeName="IsTypeOf(CardDatabaseModel.FullCard)">
+              <MappingFragment StoreEntitySet="FullCard">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CardDescription" ColumnName="CardDescription" />
+                <ScalarProperty Name="CardRarity" ColumnName="CardRarity" />
+                <ScalarProperty Name="CardType" ColumnName="CardType" />
+                <ScalarProperty Name="ManaCost" ColumnName="ManaCost" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+                <ScalarProperty Name="CardName" ColumnName="CardName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(CardDatabaseModel.FollowerCard)">
+              <MappingFragment StoreEntitySet="FollowCard">
+                <ScalarProperty Name="Attribute2" ColumnName="Attribute2" />
+                <ScalarProperty Name="Attribute1" ColumnName="Attribute1" />
+                <ScalarProperty Name="HealthRating" ColumnName="HealthRating" />
+                <ScalarProperty Name="AttackRating" ColumnName="AttackRating" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(CardDatabaseModel.ChampionCard)">
+              <MappingFragment StoreEntitySet="ChampionCard">
+                <ScalarProperty Name="LevelUpConditions" ColumnName="LevelUpConditions" />
+                <ScalarProperty Name="SpellCardID" ColumnName="SpellCardID" />
+                <ScalarProperty Name="LevelUpCardID" ColumnName="LevelUpCardID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="IsTypeOf(CardDatabaseModel.SpellCard)">
+              <MappingFragment StoreEntitySet="SpellCard">
+                <ScalarProperty Name="SpellType" ColumnName="SpellType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
